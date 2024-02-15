@@ -69,6 +69,8 @@ public class PermissionUtils {
                 return PermissionConstants.PERMISSION_GROUP_REQUEST_INSTALL_PACKAGES;
             case Manifest.permission.ACCESS_NOTIFICATION_POLICY:
                 return PermissionConstants.PERMISSION_GROUP_ACCESS_NOTIFICATION_POLICY;
+            case Manifest.permission.POST_NOTIFICATIONS:
+                return PermissionConstants.PERMISSION_GROUP_NOTIFICATION;
             default:
                 return PermissionConstants.PERMISSION_GROUP_UNKNOWN;
         }
@@ -248,6 +250,11 @@ public class PermissionUtils {
                     permissionNames.add(Manifest.permission.ACCESS_NOTIFICATION_POLICY);
                 break;
             case PermissionConstants.PERMISSION_GROUP_NOTIFICATION:
+                // The POST_NOTIFICATIONS permission is introduced in Android TIRAMISU, meaning we should
+                // not handle permissions on pre Android TIRAMISU devices.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && hasPermissionInManifest(context, permissionNames, Manifest.permission.POST_NOTIFICATIONS))
+                    permissionNames.add(Manifest.permission.POST_NOTIFICATIONS);
+                break;
             case PermissionConstants.PERMISSION_GROUP_MEDIA_LIBRARY:
             case PermissionConstants.PERMISSION_GROUP_PHOTOS:
             case PermissionConstants.PERMISSION_GROUP_REMINDERS:
